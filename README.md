@@ -4,7 +4,7 @@ A small Jakarta Servlet application packaged as a WAR for Apache Tomcat 10.1 or 
 
 ## Build
 
-Requires JDK 17 and Maven 3.8 or newer.
+Requires JDK 17 or newer and Maven 3.8 or newer. The Docker image runs on JDK 25, the latest LTS release; Maven continues to target Java 17 bytecode.
 
 ```sh
 mvn clean verify
@@ -24,4 +24,4 @@ Open `http://localhost:8080/java-maven-app/` and follow the link to the `/hello`
 
 ## Continuous integration
 
-Use Jenkins to run `mvn --batch-mode --no-transfer-progress clean verify` and archive `target/java-maven-app.war` as a build artifact. The Jenkins agent needs JDK 17 and Maven 3.8 or newer.
+The [Jenkinsfile](./Jenkinsfile) runs the Maven tests and package, archives `target/java-maven-app.war`, then builds and pushes `suryaraj/nodejs-app:<BUILD_NUMBER>` to Docker Hub. Configure a Jenkins **Username with password** credential with the ID `dockerhub-credentails`; the credential's Docker Hub account must have push access to `suryaraj/nodejs-app`. The Jenkins agent needs JDK 17 or newer, Maven 3.8 or newer, and Docker access.

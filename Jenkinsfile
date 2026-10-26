@@ -18,5 +18,32 @@ pipeline {
                 }
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t suryaraj/nodejs-app:${BUILD_NUMBER} .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-credentails',
+                    usernameVariable: 'DOCKERHUB_USERNAME',
+                    passwordVariable: 'DOCKERHUB_PASSWORD'
+                )]) {
+                    script {
+                        try {
+                            sh '''
+                                set +x
+                                printf '%s' "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+                            '''
+                            sh 'docker push suryaraj/nodejs-app:${BUILD_NUMBER}'
+                        } finally {
+                            sh 'docker logout'
+                        }
+                    }
+                }
+            }
+        }
     }
 }

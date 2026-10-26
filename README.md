@@ -24,4 +24,4 @@ Open `http://localhost:8080/java-maven-app/` and follow the link to the `/hello`
 
 ## Continuous integration
 
-The [Jenkinsfile](./Jenkinsfile) runs the Maven tests and package, archives `target/java-maven-app.war`, then builds and pushes `suryaraj/nodejs-app:<BUILD_NUMBER>` to Docker Hub. Configure a Jenkins **Username with password** credential with the ID `dockerhub-credentails`; the credential's Docker Hub account must have push access to `suryaraj/nodejs-app`. The Jenkins agent needs JDK 17 or newer, Maven 3.8 or newer, and Docker access.
+The [Jenkinsfile](./Jenkinsfile) runs the Maven tests and package, archives `target/java-maven-app.war`, builds the image, and scans it with Trivy before pushing it to Docker Hub. The scan fails the build on any HIGH or CRITICAL vulnerability, whether or not a fix is available. Configure a Jenkins **Username with password** credential with the ID `dockerhub-credentials`; the credential's Docker Hub account must have push access to `suryaraj/nodejs-app`. The Jenkins agent needs JDK 17 or newer, Maven 3.8 or newer, Docker access, and Trivy installed and available on `PATH`.

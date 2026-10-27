@@ -1,0 +1,6 @@
+# Accepted exceptions for the Go stdlib bundled in Ubuntu's /usr/bin/pebble.
+# Revisit these once the base image includes a patched Pebble package.
+CVE-2026-111943
+CVE-2026-78667
+CVE-2026-78669
+CVE-2026-97031

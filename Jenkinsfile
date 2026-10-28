@@ -51,6 +51,42 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Dev') {
+            steps {
+                sh '''
+                    if docker container inspect java-maven-app-dev >/dev/null 2>&1; then
+                        docker rm --force java-maven-app-dev
+                    fi
+                    docker run --detach \
+                        --name java-maven-app-dev \
+                        --restart unless-stopped \
+                        --publish 8085:8080 \
+                        suryaraj/nodejs-app:${BUILD_NUMBER}
+                '''
+            }
+        }
+
+        stage('Approve Production Deployment') {
+            steps {
+                input message: "Deploy build #${env.BUILD_NUMBER} to production?", ok: 'Deploy to production'
+            }
+        }
+
+        stage('Deploy to Prod') {
+            steps {
+                sh '''
+                    if docker container inspect java-maven-app-prod >/dev/null 2>&1; then
+                        docker rm --force java-maven-app-prod
+                    fi
+                    docker run --detach \
+                        --name java-maven-app-prod \
+                        --restart unless-stopped \
+                        --publish 8086:8080 \
+                        suryaraj/nodejs-app:${BUILD_NUMBER}
+                '''
+            }
+        }
     }
 
     post {

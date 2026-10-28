@@ -69,7 +69,9 @@ pipeline {
 
         stage('Approve Production Deployment') {
             steps {
-                input message: "Deploy build #${env.BUILD_NUMBER} to production?", ok: 'Deploy to production'
+                timeout(time: 5, unit: 'MINUTES') {
+                    input message: "Deploy build #${env.BUILD_NUMBER} to production?", ok: 'Deploy to production'
+                }
             }
         }
 

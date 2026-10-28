@@ -55,18 +55,28 @@ pipeline {
 
     post {
         success {
-            mail(
-                to: 'devopsuryaraj@gmail.com',
-                subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Build #${env.BUILD_NUMBER} completed successfully.\nBuild URL: ${env.BUILD_URL}"
-            )
+            mail bcc: '', body: """Hi Team,
+
+Build #$BUILD_NUMBER is successful, please go through the url
+
+$BUILD_URL
+
+and verify the details.
+
+Regards,
+DevOps Team""", cc: '', from: '', replyTo: '', subject: 'BUILD SUCCESS NOTIFICATION', to: 'devopsuryaraj@gmail.com'
         }
         failure {
-            mail(
-                to: 'devopsuryaraj@gmail.com',
-                subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Build #${env.BUILD_NUMBER} failed.\nBuild URL: ${env.BUILD_URL}"
-            )
+            mail bcc: '', body: """Hi Team,
+            
+Build #$BUILD_NUMBER is unsuccessful, please go through the url
+
+$BUILD_URL
+
+and verify the details.
+
+Regards,
+DevOps Team""", cc: '', from: '', replyTo: '', subject: 'BUILD FAILED NOTIFICATION', to: 'devopsuryaraj@gmail.com'
         }
     }
 }

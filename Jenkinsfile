@@ -3,6 +3,9 @@ pipeline {
 
     stages {
         stage('Unit Test') {
+            agent {
+                label 'ubuntu-vm'
+            }
             steps {
                 sh 'mvn --batch-mode --no-transfer-progress test'
             }
